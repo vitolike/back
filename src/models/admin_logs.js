@@ -1,29 +1,29 @@
 import db from '../utils/db.js'
-const table = 'admin_logs'
 
-export function getAll() {
-  return db.query(`SELECT * FROM ${table}`)
+export async function getAll() {
+  return db.query('SELECT * FROM admin_logs')
 }
 
-export function getById(id) {
-  return db.query(`SELECT * FROM ${table} WHERE id = $1`, [id])
+export async function getById(id) {
+  return db.query('SELECT * FROM admin_logs WHERE id = $1', [id])
 }
 
-export function create(data) {
+export async function create(data) {
   const keys = Object.keys(data)
   const values = Object.values(data)
-  const cols = keys.join(', ')
-  const placeholders = keys.map((_, i) => `$${i + 1}`).join(', ')
-  return db.query(`INSERT INTO ${table} (${cols}) VALUES (${placeholders}) RETURNING *`, values)
+  const params = keys.map((_, i) => `$${i + 1}`).join(',')
+  const query = `INSERT INTO admin_logs (${keys.join(',')}) VALUES (${params}) RETURNING *`
+  return db.query(query, values)
 }
 
-export function update(id, data) {
+export async function update(id, data) {
   const keys = Object.keys(data)
   const values = Object.values(data)
-  const sets = keys.map((key, i) => `${key} = $${i + 1}`).join(', ')
-  return db.query(`UPDATE ${table} SET ${sets} WHERE id = $${keys.length + 1} RETURNING *`, [...values, id])
+  const sets = keys.map((key, i) => `${key} = $${i + 1}`).join(',')
+  const query = `UPDATE admin_logs SET ${sets} WHERE id = $${keys.length + 1} RETURNING *`
+  return db.query(query, [...values, id])
 }
 
-export function remove(id) {
-  return db.query(`DELETE FROM ${table} WHERE id = $1`, [id])
+export async function remove(id) {
+  return db.query('DELETE FROM admin_logs WHERE id = $1', [id])
 }

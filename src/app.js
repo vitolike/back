@@ -13,7 +13,11 @@ app.use(cors())
 app.use(express.json())
 
 app.get('/', (_, res) => res.send({ ok: true, msg: 'Casino API - Express' }))
+app.use('/auth', authRoutes)
+app.use('/admin', adminAuthRoutes)
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc))
 
+// CRUD rotas
 import usersRoutes from './routes/users.js'
 import providersRoutes from './routes/providers.js'
 import gamesRoutes from './routes/games.js'
@@ -30,14 +34,6 @@ import adminsRoutes from './routes/admins.js'
 import admin_logsRoutes from './routes/admin_logs.js'
 import user_blocksRoutes from './routes/user_blocks.js'
 import affiliatesRoutes from './routes/affiliates.js'
-
-// Rotas
-app.use('/auth', authRoutes)
-app.use('/admin', adminAuthRoutes)
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc))
-
-export default app
-
 app.use('/users', usersRoutes)
 app.use('/providers', providersRoutes)
 app.use('/games', gamesRoutes)
