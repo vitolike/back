@@ -1,9 +1,20 @@
 import Fastify from 'fastify';
+import { Client } from 'pg';
 
 const fastify = Fastify({ logger: true });
 
+const client = new Client({
+  host: process.env.DB_HOST,
+  database: process.env.DB_DATABASE,
+  user: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+});
+
+await client.connect();
+
 fastify.get('/', async (request, reply) => {
-  return { hello: 'world from Fastify + Google Cloud Run' };
+  const result = await client.query('SELECT NOW() as now');
+  return { time: result.rows[0].now };
 });
 
 const PORT = process.env.PORT || 8080;
