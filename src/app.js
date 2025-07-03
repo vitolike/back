@@ -50,3 +50,6 @@ app.use('/admins', adminsRoutes)
 app.use('/admin_logs', admin_logsRoutes)
 app.use('/user_blocks', user_blocksRoutes)
 app.use('/affiliates', affiliatesRoutes)
+
+
+export default app;
